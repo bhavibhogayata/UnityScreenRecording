@@ -9,16 +9,16 @@ public class CameraFrames : MonoBehaviour
     private Texture2D mTexture;
     private RenderTexture mRtBuffer = null;
 
-    public int _Fps = 15;
+    public int fps = 15;
    
     //Use this to test the frames output. 
     public RawImage _Preview = null;
 
     //Width the output is suppose to have
-    public int _Width;
+    public int frameWidth;
     
     //Height the output is suppose to have
-    public int _Height;
+    public int frameHeight;
 
     private byte[] mByteBuffer = null;
 
@@ -28,7 +28,7 @@ public class CameraFrames : MonoBehaviour
         {
             if (mTexture == null)
             {
-                mTexture = new Texture2D(_Width, _Height, TextureFormat.RGBA32, false);
+                mTexture = new Texture2D(frameWidth, frameHeight, TextureFormat.RGBA32, false);
             }
 
             return mTexture;
@@ -40,7 +40,7 @@ public class CameraFrames : MonoBehaviour
         {
             if (mRtBuffer == null)
             {
-                mRtBuffer = new RenderTexture(_Width, _Height, 0, RenderTextureFormat.ARGB32);
+                mRtBuffer = new RenderTexture(frameWidth, frameHeight, 0, RenderTextureFormat.ARGB32);
 
                 mRtBuffer.wrapMode = TextureWrapMode.Repeat;
                 mRtBuffer.depth = 24;
@@ -51,8 +51,14 @@ public class CameraFrames : MonoBehaviour
     }
     void Update()
     {
+        if (!ScreenRecord.isRecording)
+        {
+            return;
+        }
+
+
         //ensure correct fps
-        float deltaSample = 1.0f / _Fps;
+        float deltaSample = 1.0f / fps;
         mLastSample += Time.deltaTime;
         if (mLastSample >= deltaSample)
         {
@@ -74,6 +80,8 @@ public class CameraFrames : MonoBehaviour
             //instead of allocating a new one all the time
             mByteBuffer = BufferTexture.GetRawTextureData();
 
+            ScreenRecord.instance.AddVideoFrames(mByteBuffer, mByteBuffer.Length);
+
             //reset the camera/active render texture  in case it is still used for other purposes
             _Camera.targetTexture = oldTargetTexture;
             RenderTexture.active = oldActiveTexture;
@@ -84,6 +92,12 @@ public class CameraFrames : MonoBehaviour
         }
     }
 
+    public void ReleaseData()
+    {
+        mByteBuffer = null;
+        _Preview.texture = null;
+        BufferRenderTexture.Release();
+    }
     private void OnDestroy()
     {
         if (mRtBuffer != null)
