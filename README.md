@@ -3,7 +3,7 @@
 This sample project is developed for  **Unity Engine** and supports only **Android** platform. It provides support for recording Unity's Main Camera view and save it as video(.mp4) format. This project contains Unity C# code to get Main Camera frames and **.aar** file to save those frames as video in .mp4 format on Android device.
 
 # Requirements
--  Unity Editor 2022.3.40f1
+-  Unity Editor 6000.3.8f1 ( might work with other Unity Versions)
 -  Android OS 8.0 and up
 
 
@@ -13,15 +13,15 @@ Go to Scenes folder. **ScreenRecordSample** scene has sample code and basic setu
 
 ## Start Recording
 
-	 javaClass.Call<string>("InitRecording", Width, Height, fps, filePath);
+     javaClass.Call<string>("InitRecording", Width, Height, fps, filePath, isRGBA);
 
 ## Add Frames to video
 
-	 javaClass.Call("AddVideoFrames", sdata);
+     javaClass.Call("AddVideoFrames", sdata);
 
 ## Stop Recoding
 
-	javaClass.Call("StopRecordVideo");
+    javaClass.Call("StopRecordVideo");
 
 ## References
 - [GitHub - duzexu/Record_Screen_In_Unity](https://github.com/duzexu/Record_Screen_In_Unity) : This repository provides the code to record screen in unity by making Unity project as Android Library.
