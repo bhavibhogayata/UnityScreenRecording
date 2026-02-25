@@ -12,12 +12,12 @@ public class RotateObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        trans = this.transform; 
+        trans = this.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        trans.Rotate(speed, speed, speed);
+        trans.Rotate(Vector3.one * speed * Time.deltaTime, Space.World);
     }
 }

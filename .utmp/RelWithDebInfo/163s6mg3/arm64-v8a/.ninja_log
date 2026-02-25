@@ -1,0 +1,5 @@
+# ninja log v5
+173	279	1772013787955033441	/Users/macmini2/Documents/RnD/GitHub/UnityScreenRecording/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/163s6mg3/obj/arm64-v8a/libswappywrapper.so	3d7957f6d72ad189
+0	172	1772013787856893161	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	51c8a10bef8a6a72
+0	371	1772017787213718924	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	51c8a10bef8a6a72
+371	595	1772017787420533870	/Users/macmini2/Documents/RnD/GitHub/UnityScreenRecording/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/163s6mg3/obj/arm64-v8a/libswappywrapper.so	3d7957f6d72ad189

@@ -7,46 +7,48 @@ using UnityEngine;
 public class ScreenRecord : MonoBehaviour
 {
     [SerializeField]
-    private CameraFrames cameraFrames;
+    // private CameraFrames cameraFrames;
+    private CameraFrameSettings cameraFrameSettings;
 
     public static bool isRecording;
 
     AndroidJavaObject javaClass;
 
+    string finalPath;
     public static ScreenRecord instance;
+
+    public Action<string> OnRecordingStopped;
 
     private void Awake()
     {
         instance = this;
     }
-
-    // Start is called before the first frame update
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isRecording = false;
-        javaClass = new AndroidJavaObject("com.example.screenrecorder.NativeScreenRecorder");
-
+        javaClass = new AndroidJavaObject("com.bhavisha.screenrecord.ScreenRecorder");
     }
+
     public void StartVideoRecording()
     {
         InitVideoRecording();
     }
     private string GenerateFullPathString()
     {
-        string extStoragePath = javaClass.Call<string>("GetExternalStoragePath");
-        Debug.Log($"extStoragePath = {extStoragePath}");
-        string filePath = Path.Combine(extStoragePath, $"UnityRecording_{DateTime.Now.Millisecond.ToString()}.mp4");
-        Debug.Log($"filePath = {filePath}");
+        string tempPath = Application.persistentDataPath;
+        string filePath = Path.Combine(tempPath, $"UnityRecording_{DateTime.Now:ddMMyyyyHHmmss}.mp4");
+        Debug.Log($"-------- filePath = {filePath}");
         return filePath;
-
     }
     private void InitVideoRecording()
     {
         try
         {
             string filePath = GenerateFullPathString();
-            string fullpath = javaClass.Call<string>("InitRecording", cameraFrames.frameWidth, cameraFrames.frameHeight, cameraFrames.fps, filePath);
-            Debug.Log($"Full path = {fullpath}");
+            javaClass.Call("InitRecording", cameraFrameSettings.frameWidth, cameraFrameSettings.frameHeight, cameraFrameSettings.fps, filePath, cameraFrameSettings.isRGBA);
+            Debug.Log($"-------- Full path = {filePath}");
+            finalPath = filePath;
             isRecording = true;
         }
         catch (System.Exception ex)
@@ -82,8 +84,9 @@ public class ScreenRecord : MonoBehaviour
         try
         {
             isRecording = false;
-            cameraFrames.ReleaseData();
             javaClass.Call("StopRecordVideo");
+
+            OnRecordingStopped.Invoke(finalPath);
         }
         catch (System.Exception ex)
         {

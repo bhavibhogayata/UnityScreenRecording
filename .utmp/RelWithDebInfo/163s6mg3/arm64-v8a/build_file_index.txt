@@ -1,0 +1,2 @@
+/Users/macmini2/Documents/RnD/GitHub/UnityScreenRecording/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/Users/macmini2/Documents/RnD/GitHub/UnityScreenRecording/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/FramePacing/CMakeLists.txt

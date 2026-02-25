@@ -1,25 +1,34 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class CameraFrames : MonoBehaviour
 {
-    public Camera _Camera;
+    [SerializeField]
+    private CameraFrameSettings cameraFrameSettings;
+
+    [SerializeField]
+    private VideoPlayer videoPlayer;
+
+    [SerializeField]
+    private Camera _Camera;
     private float mLastSample;
 
     private Texture2D mTexture;
     private RenderTexture mRtBuffer = null;
 
-    public int fps = 15;
-   
     //Use this to test the frames output. 
     public RawImage _Preview = null;
 
+    [SerializeField]
+    private int fps = 15;
     //Width the output is suppose to have
+    [SerializeField]
     public int frameWidth;
-    
     //Height the output is suppose to have
+    [SerializeField]
     public int frameHeight;
-
     private byte[] mByteBuffer = null;
 
     private Texture2D BufferTexture
@@ -48,6 +57,28 @@ public class CameraFrames : MonoBehaviour
 
             return mRtBuffer;
         }
+    }
+    void Start()
+    {
+        SetupFrameSettings();
+        ScreenRecord.instance.OnRecordingStopped += OnRecordingStopped;
+    }
+    void SetupFrameSettings()
+    {
+        fps = cameraFrameSettings.fps;
+        frameHeight = cameraFrameSettings.frameHeight;
+        frameWidth = cameraFrameSettings.frameWidth;
+    }
+    private void OnRecordingStopped(string path)
+    {
+        Debug.Log($"Recorded Path : {path}");
+
+        if (File.Exists(path))
+        {
+            videoPlayer.url = "file://" + path;
+            videoPlayer.Play();
+        }
+        ReleaseData();
     }
     void Update()
     {
